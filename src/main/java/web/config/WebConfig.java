@@ -10,6 +10,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaDialect;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,6 +24,8 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -30,17 +36,13 @@ import java.util.Properties;
 public class WebConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
-
     public final Environment env;
-
-
 
     @Autowired
     public WebConfig(ApplicationContext applicationContext, Environment env) {
         this.applicationContext = applicationContext;
         this.env = env;
     }
-
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -101,7 +103,6 @@ public class WebConfig implements WebMvcConfigurer {
     public PlatformTransactionManager hibernateTransactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
-
         return transactionManager;
     }
 }
